@@ -44,5 +44,16 @@ test_iter = iterators.SerialIterator(
 updater = training.StandardUpdater(train_iter, optimizer)
 trainer = training.Trainer(updater, (epoch, 'epoch'), out=out)
 
+# Write logs
+trainer.extend(extensions.LogReport())
+
+# Print logs to stdout
+trainer.extend(extensions.PrintReport(
+    ['epoch', 'main/loss', 'validation/main/loss',
+     'main/accuracy', 'validation/main/accuracy', 'elapsed_time']))
+
+# Print a progress bar to stdout
+trainer.extend(extensions.ProgressBar())
+
 # Run the training
 trainer.run()
