@@ -44,6 +44,9 @@ test_iter = iterators.SerialIterator(
 updater = training.StandardUpdater(train_iter, optimizer)
 trainer = training.Trainer(updater, (epoch, 'epoch'), out=out)
 
+# Evaluate the model with the test dataset
+trainer.extend(extensions.Evaluator(test_iter, model))
+
 # Write logs
 trainer.extend(extensions.LogReport())
 
