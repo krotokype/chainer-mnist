@@ -49,6 +49,9 @@ trainer = training.Trainer(updater, (epoch, 'epoch'), out=out)
 # Evaluate the model with the test dataset
 trainer.extend(extensions.Evaluator(test_iter, model))
 
+# Take a snapshot after run all training
+trainer.extend(extensions.snapshot(), trigger=(epoch, 'epoch'))
+
 # Write logs
 trainer.extend(extensions.LogReport())
 
