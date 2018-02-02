@@ -7,6 +7,7 @@ import chainer.functions as F
 import chainer.links as L
 from chainer.training import extensions
 
+from sys import argv
 from os import path
 
 
@@ -27,6 +28,7 @@ class TLP(Chain):  # Two Layer Perceptron
 unit = 50
 batch_size = 100
 epoch = 100
+frequency = epoch // 10
 out = 'result'
 
 # Set up a neural network to train
@@ -49,8 +51,8 @@ trainer = training.Trainer(updater, (epoch, 'epoch'), out=out)
 # Evaluate the model with the test dataset
 trainer.extend(extensions.Evaluator(test_iter, model))
 
-# Take a snapshot after run all training
-trainer.extend(extensions.snapshot(), trigger=(epoch, 'epoch'))
+# Take snapshots
+trainer.extend(extensions.snapshot(), trigger=(frequency, 'epoch'))
 
 # Write logs
 trainer.extend(extensions.LogReport())
@@ -62,6 +64,10 @@ trainer.extend(extensions.PrintReport(
 
 # Print a progress bar to stdout
 trainer.extend(extensions.ProgressBar())
+
+# Resume from a snapshot
+if len(argv) > 1:
+    serializers.load_npz(argv[1], trainer)
 
 # Run the training
 trainer.run()
