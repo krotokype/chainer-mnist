@@ -7,6 +7,8 @@ import chainer.functions as F
 import chainer.links as L
 from chainer.training import extensions
 
+from os import path
+
 
 class TLP(Chain):  # Two Layer Perceptron
 
@@ -60,3 +62,6 @@ trainer.extend(extensions.ProgressBar())
 
 # Run the training
 trainer.run()
+
+# Take a model
+serializers.save_npz(path.join(out, 'model.npz'), model)
